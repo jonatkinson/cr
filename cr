@@ -4,6 +4,8 @@
 # Usage: cr <repo-name> or cr <org-name> <repo-name>
 
 CONFIG_FILE="$HOME/.config/cr/config"
+ORG_FILE="$HOME/.config/cr/organisation"
+DEFAULT_ORG="jonatkinson"
 
 # Check if config file exists and read GitHub API key
 if [[ ! -f $CONFIG_FILE ]]; then
@@ -13,14 +15,19 @@ fi
 
 GITHUB_TOKEN=$(<"$CONFIG_FILE")
 
+# Check if organization file exists and read organization name
+if [[ -f $ORG_FILE ]]; then
+  DEFAULT_ORG=$(<"$ORG_FILE")
+fi
+
 # Function to create a new repository
 create_repo() {
   local org="$1"
   local repo="$2"
   local url="https://api.github.com/orgs/$org/repos"
 
-  # Use /user/repos endpoint if creating in the personal account "jonatkinson"
-  if [[ "$org" == "jonatkinson" ]]; then
+  # Use /user/repos endpoint if creating in the personal account
+  if [[ "$org" == "$DEFAULT_ORG" ]]; then
     url="https://api.github.com/user/repos"
   fi
 
@@ -43,14 +50,12 @@ create_repo() {
   fi
 }
 
-
 # Main script logic
 if [[ $# -eq 1 ]]; then
-  create_repo "jonatkinson" "$1"
+  create_repo "$DEFAULT_ORG" "$1"
 elif [[ $# -eq 2 ]]; then
   create_repo "$1" "$2"
 else
   echo "Usage: cr <repo-name> or cr <org-name> <repo-name>"
   exit 1
 fi
-
