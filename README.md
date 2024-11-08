@@ -1,4 +1,4 @@
-# cr - Create GitHub Repositories from the Command Line
+# cr 
 
 The `cr` script is a simple tool to create new private GitHub repositories in your GitHub account or organization directly from the command line. It uses the GitHub API and `curl`.
 
